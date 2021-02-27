@@ -1,4 +1,7 @@
+.idea
 .project
 .pydevproject
+__pycache__
+venv
 src/*.pyc
 src/icarustouch.ini

@@ -86,11 +86,13 @@ class SettingMIDI(SettingItem):
         
         # add all the selectable MIDI output devices
         for i in range(device_count):
-            if pygame.midi.get_device_info(i)[3] == 1 and (pygame.midi.get_device_info(i)[4] == 0 or pygame.midi.get_device_info(i)[1] == self.value):
+            if pygame.midi.get_device_info(i)[3] == 1 \
+                    and (pygame.midi.get_device_info(i)[4] == 0
+                         or pygame.midi.get_device_info(i)[1] == self.value):
                 # if it's an output device and it's not already opened (unless it's the device opened by ME), display it in list.
                 # if this is the device that was selected before, display it pressed
                 state = 'down' if pygame.midi.get_device_info(i)[1] == self.value else 'normal'
-                btn = ToggleButton(text=pygame.midi.get_device_info(i)[1], state=state, group=uid)
+                btn = ToggleButton(text=pygame.midi.get_device_info(i)[1].decode('utf8'), state=state, group=uid)
                 btn.bind(on_release=self._set_option)
                 content.add_widget(btn)
 

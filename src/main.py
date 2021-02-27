@@ -26,9 +26,13 @@ along with IcarusTouch.  If not, see <http://www.gnu.org/licenses/>.
 import pygame.midi
 
 import kivy
-kivy.require('1.7.0')
+kivy.require('2.0.0')
 
 from kivy.app import App
+# noinspection PyUnresolvedReferences
+from kivy.modules import keybinding
+# noinspection PyUnresolvedReferences
+from kivy.modules import inspector
 from kivy.config import Config
 # for making screenshots with F12:
 Config.set('modules', 'keybinding', '')
@@ -396,25 +400,25 @@ class IcarusTouchWidget(Widget):
         
         c = pygame.midi.get_count()
         id_device_from_settings = -1
-        #print '%s midi devices found' % c
+        #print)'%s midi devices found' % c@
         for i in range(c):
-            #print '%s name: %s input: %s output: %s opened: %s' % (pygame.midi.get_device_info(i))
-            if pygame.midi.get_device_info(i)[1] == self.app.config.get('MIDI', 'Device'):
+            #print('%s name: %s input: %s output: %s opened: %s' % (pygame.midi.get_device_info(i))@
+            if pygame.midi.get_device_info(i)[1].decode('utf8') == self.app.config.get('MIDI', 'Device'):
                 # if the device from the settings exists in the computers list, take that!
                 id_device_from_settings = i
         
-        #print 'Default is %s' % pygame.midi.get_device_info(pygame.midi.get_default_output_id())[1]
+        #print('Default is %s' % pygame.midi.get_device_info(pygame.midi.get_default_output_id())[1])
         
-        if id_device_from_settings <> -1:
+        if id_device_from_settings != -1:
             self.midi_device = id_device_from_settings
-            print 'MIDI device "%s" found. Connecting.' % pygame.midi.get_device_info(id_device_from_settings)[1]
+            print('MIDI device "%s" found. Connecting.' % pygame.midi.get_device_info(id_device_from_settings)[1].decode('utf8'))
         else:
             # if it was not in the list, take the default one
             self.midi_device = pygame.midi.get_default_output_id()
-            print 'Warning: No MIDI device named "%s" found. Choosing the system default ("%s").' % (self.app.config.get('MIDI', 'Device'), pygame.midi.get_device_info(self.midi_device)[1])
+            print('Warning: No MIDI device named "%s" found. Choosing the system default ("%s").' % (self.app.config.get('MIDI', 'Device'), pygame.midi.get_device_info(self.midi_device)[1].decode('utf8')))
         
         if pygame.midi.get_device_info(self.midi_device)[4] == 1:
-            print 'Error: Can''t open the MIDI device - It''s already opened!'
+            print('Error: Can''t open the MIDI device - It''s already opened!')
             
         self.midi_out = pygame.midi.Output(self.midi_device)
     
@@ -559,10 +563,10 @@ class IcarusTouch(App):
     
     def build(self):
         # print the application informations
-        print '\nIcarusTouch v%s  Copyright (C) 2011  Cyril Stoller' % VERSION
-        print 'This program comes with ABSOLUTELY NO WARRANTY'
-        print 'This is free software, and you are welcome to redistribute it'
-        print 'under certain conditions; see the source code for details.\n'
+        print('\nIcarusTouch v%s  Copyright (C) 2011  Cyril Stoller' % VERSION)
+        print('This program comes with ABSOLUTELY NO WARRANTY')
+        print('This is free software, and you are welcome to redistribute it')
+        print('under certain conditions; see the source code for details.\n')
         
         # TODO: what about a popup saying you have to wait?
         '''
@@ -573,7 +577,7 @@ class IcarusTouch(App):
         '''
         
         # in lack of a popup, print it to the console
-        print 'Loading images... Please wait.'
+        print('Loading images... Please wait.')
         
         # create the root widget and give it a reference of the application instance (so it can access the application settings)
         self.icarustouchwidget = IcarusTouchWidget(app=self)
@@ -747,18 +751,18 @@ class IcarusTouch(App):
     
     def print_widget_tree(self):
         # not used but pretty useful function for illustrating the widget tree
-        print '#################################'
-        print '##         Widget Tree         ##'
-        print '#################################\n'
+        print('#################################')
+        print('##         Widget Tree         ##')
+        print('#################################\n')
 
         for child in self.children:
-            print '%s' % child
+            print('%s' % child)
             
             for subchild in child.children:
-                print '--> %s' % subchild
+                print('--> %s' % subchild)
                 
                 for subsubchild in subchild.children:
-                    print '    --> %s' % subsubchild
+                    print('    --> %s' % subsubchild)
 
 
 
